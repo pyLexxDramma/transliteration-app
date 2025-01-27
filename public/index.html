@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Транслитерация</title>
+    <script>
+        async function transliterateText(inputField, outputField) {
+            const text = inputField.value;
+            if (text) {
+                const response = await fetch('/api', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ data: text }) // Исправлено: отправляем data
+                });
+                const result = await response.json();
+                outputField.value = result.data; // Устанавливаем результат транслитерации
+            } else {
+                outputField.value = ''; // Очищаем поле, если входное пустое
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Транслитерация</h1>
+    <input type="text" id="input" oninput="transliterateText(this, document.getElementById('output'))" placeholder="Введите текст">
+    <input type="text" id="output" placeholder="Результат" readonly>
+</body>
+</html>
